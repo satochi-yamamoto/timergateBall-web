@@ -55,14 +55,14 @@ const ManageTeamsDialog = ({ open, onOpenChange }) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] bg-gray-800 border-gray-700 text-white">
+      <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto bg-gray-800 border-gray-700 text-white">
         <DialogHeader>
           <DialogTitle>Gerenciar Equipes</DialogTitle>
           <DialogDescription className="text-gray-400">
             Selecione uma equipe que você capitaneia para gerenciar.
           </DialogDescription>
         </DialogHeader>
-        <div className="py-4">
+        <div className="py-4 max-h-[60vh] overflow-y-auto">
           {loading ? (
             <p>Carregando suas equipes...</p>
           ) : teams.length === 0 ? (

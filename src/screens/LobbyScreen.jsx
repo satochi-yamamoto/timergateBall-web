@@ -59,7 +59,7 @@ const LobbyScreen = () => {
   }, [fetchGames]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col items-center p-4 text-white">
+    <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col items-center p-4 text-white">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
