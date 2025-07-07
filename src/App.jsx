@@ -8,7 +8,7 @@ import AuthScreen from '@/screens/AuthScreen';
 import LobbyScreen from '@/screens/LobbyScreen';
 import ManageTeamScreen from '@/screens/ManageTeamScreen';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { GameProvider } from '@/contexts/GameContext';
+import { GameProvider } from '@/contexts/GameContext.jsx';
 
 function App() {
   const { session, loading } = useAuth();

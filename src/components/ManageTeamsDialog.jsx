@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
-import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { useAuth } from '@/contexts/SupabaseAuthContext.jsx';
 import { motion } from 'framer-motion';
 
 const ManageTeamsDialog = ({ open, onOpenChange }) => {
