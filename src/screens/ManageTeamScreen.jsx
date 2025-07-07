@@ -232,7 +232,7 @@ const ManageTeamScreen = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black p-4 md:p-8 text-white">
+    <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black p-4 md:p-8 text-white">
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto">
         <Button onClick={() => navigate('/')} variant="ghost" className="mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" /> Voltar ao Lobby
