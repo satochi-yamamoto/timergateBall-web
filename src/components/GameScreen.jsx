@@ -92,7 +92,7 @@ const GameScreen = () => {
   }, [timeLeft, status, isAudioInitialized, playSound]);
 
   if (loading) {
-    return <div className="h-screen w-screen bg-gray-900 flex items-center justify-center text-white">Carregando Jogo...</div>;
+    return <div className="min-h-screen w-screen overflow-y-auto bg-gray-900 flex items-center justify-center text-white">Carregando Jogo...</div>;
   }
   
   if (error) {
@@ -101,7 +101,7 @@ const GameScreen = () => {
   }
 
   return (
-    <div className="h-screen w-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-4 gap-4">
+    <div className="min-h-screen w-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-4 gap-4">
       <div className="flex gap-4 h-20">
         <TeamScore team="red" score={teamScores.red} label="EQUIPE VERMELHA" />
         <TeamScore team="white" score={teamScores.white} label="EQUIPE BRANCA" />
