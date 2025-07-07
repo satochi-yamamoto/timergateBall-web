@@ -1,0 +1,93 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --red-team: #E53935;
+  --white-team: #FFFFFF;
+  --timer-yellow: #FFD600;
+  --black-text: #000000;
+}
+
+body {
+  @apply bg-gray-900 text-white overflow-hidden;
+  font-family: 'Roboto', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.timer-font {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
+}
+
+.score-font {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.pulse-animation {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.bounce-in {
+  animation: bounceIn 0.3s ease-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Prevent text selection and highlighting */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure full height on mobile */
+html, body, #root {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
