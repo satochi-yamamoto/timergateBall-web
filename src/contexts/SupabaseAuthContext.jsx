@@ -70,13 +70,13 @@ export const AuthProvider = ({ children }) => {
   }, [toast]);
 
   const signOut = useCallback(async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
 
-    if (error) {
+    if (error && error.error !== 'session_not_found') {
       toast({
         variant: "destructive",
         title: "Sign out Failed",
-        description: error.message || "Something went wrong",
+        description: error.message || error.error_description || "Something went wrong",
       });
     }
 
