@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext.jsx';
-import { useGame } from '@/contexts/GameContext';
+import { useGame } from '@/contexts/GameContext.jsx';
 
 export const useGameState = (gameId) => {
   const { user } = useAuth();
