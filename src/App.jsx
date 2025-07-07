@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext.jsx';
 import GameScreen from '@/components/GameScreen.jsx';
 import AuthScreen from '@/screens/AuthScreen';
 import LobbyScreen from '@/screens/LobbyScreen';
+import ManageTeamScreen from '@/screens/ManageTeamScreen';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { GameProvider } from '@/contexts/GameContext';
 
@@ -35,6 +36,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <GameScreen />
+                </ProtectedRoute>
+              } 
+            />
+             <Route 
+              path="/team/:teamId" 
+              element={
+                <ProtectedRoute>
+                  <ManageTeamScreen />
                 </ProtectedRoute>
               } 
             />

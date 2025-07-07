@@ -8,6 +8,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { Users, LogOut } from 'lucide-react';
 import CreateGameDialog from '@/components/CreateGameDialog';
+import ManageTeamsDialog from '@/components/ManageTeamsDialog';
 
 const LobbyScreen = () => {
   const { user, signOut } = useAuth();
@@ -15,47 +16,40 @@ const LobbyScreen = () => {
   const navigate = useNavigate();
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isManageTeamsDialogOpen, setManageTeamsDialogOpen] = useState(false);
 
   const fetchGames = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const { data: teamIds, error: teamError } = await supabase
-      .from('team_members')
-      .select('team_id')
-      .eq('user_id', user.id);
-
-    if (teamError) {
-      toast({ variant: "destructive", title: "Erro ao buscar equipes", description: teamError.message });
-      setLoading(false);
-      return;
-    }
-
-    const userTeamIds = teamIds.map(t => t.team_id);
-
-    if (userTeamIds.length > 0) {
+    
+    try {
       const { data: gameData, error: gameError } = await supabase
         .from('games')
         .select('id, team_red:teams!games_team_red_id_fkey(name), team_white:teams!games_team_white_id_fkey(name), status')
-        .or(`team_red_id.in.(${userTeamIds.join(',')}),team_white_id.in.(${userTeamIds.join(',')})`)
         .neq('status', 'finished')
         .order('created_at', { ascending: false });
-      
+
       if (gameError) {
         toast({ variant: "destructive", title: "Erro ao buscar jogos", description: gameError.message });
+        setGames([]);
       } else {
-        setGames(gameData);
+        setGames(gameData || []);
       }
-    } else {
-      setGames([]);
+
+    } catch (error) {
+        toast({ variant: "destructive", title: "Ocorreu um erro inesperado", description: error.message });
+    } finally {
+        setLoading(false);
     }
-    setLoading(false);
   }, [user, toast]);
 
   useEffect(() => {
     fetchGames();
     
     const gameListener = supabase.channel('public:games')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, fetchGames)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, (payload) => {
+          fetchGames();
+      })
       .subscribe();
 
     return () => {
@@ -63,14 +57,6 @@ const LobbyScreen = () => {
     }
 
   }, [fetchGames]);
-
-  const handleManageTeams = () => {
-     toast({
-      title: "🚧 Em Desenvolvimento",
-      description: "O gerenciamento de equipes será implementado em breve! 🚀",
-      variant: "destructive",
-    });
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col items-center p-4 text-white">
@@ -91,7 +77,7 @@ const LobbyScreen = () => {
             <CreateGameDialog />
           </motion.div>
           <motion.div whileHover={{ scale: 1.03 }}>
-            <Button onClick={handleManageTeams} variant="outline" className="w-full h-28 text-lg bg-transparent border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black flex flex-col gap-1">
+             <Button onClick={() => setManageTeamsDialogOpen(true)} variant="outline" className="w-full h-28 text-lg bg-transparent border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black flex flex-col gap-1">
               <Users size={28}/>
               Gerenciar Equipes
             </Button>
@@ -133,6 +119,7 @@ const LobbyScreen = () => {
           </div>
         </div>
       </motion.div>
+      <ManageTeamsDialog open={isManageTeamsDialogOpen} onOpenChange={setManageTeamsDialogOpen} />
     </div>
   );
 };
