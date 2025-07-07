@@ -83,6 +83,26 @@ export const AuthProvider = ({ children }) => {
     return { error };
   }, [toast]);
 
+  const sendPasswordReset = useCallback(async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth?view=update_password`,
+    });
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao enviar e-mail",
+        description: error.message,
+      });
+    } else {
+      toast({
+        title: "E-mail de recuperação enviado",
+        description: "Verifique sua caixa de entrada para redefinir sua senha.",
+      });
+    }
+    return { error };
+  }, [toast]);
+
   const value = useMemo(() => ({
     user,
     session,
@@ -90,7 +110,8 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
-  }), [user, session, loading, signUp, signIn, signOut]);
+    sendPasswordReset,
+  }), [user, session, loading, signUp, signIn, signOut, sendPasswordReset]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
