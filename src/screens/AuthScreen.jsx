@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { motion } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
+import Footer from '@/components/Footer.jsx';
 
 const AuthScreen = () => {
   const [authMode, setAuthMode] = useState('login'); // 'login', 'signup', 'recovery'
@@ -48,6 +49,7 @@ const AuthScreen = () => {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -109,6 +111,8 @@ const AuthScreen = () => {
         </div>
       </motion.div>
     </div>
+    <Footer />
+  </>
   );
 };
 

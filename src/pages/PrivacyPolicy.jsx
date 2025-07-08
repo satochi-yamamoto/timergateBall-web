@@ -2,11 +2,13 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import Footer from '@/components/Footer.jsx';
 
 function PrivacyPolicy() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen py-8 px-4 max-w-3xl mx-auto">
+    <>
+      <div className="min-h-screen py-8 px-4 max-w-3xl mx-auto">
       <Helmet>
         <title>Política de Privacidade</title>
         <meta name="description" content="Saiba como tratamos seus dados no gerador de currículos." />
@@ -22,7 +24,9 @@ function PrivacyPolicy() {
       <Button onClick={() => navigate('/')} variant="outline" className="border-white/20 text-white hover:bg-white/10">
         Voltar para a página inicial
       </Button>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }
 

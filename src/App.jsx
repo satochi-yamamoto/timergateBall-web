@@ -7,8 +7,11 @@ import GameScreen from '@/components/GameScreen.jsx';
 import AuthScreen from '@/screens/AuthScreen';
 import LobbyScreen from '@/screens/LobbyScreen';
 import ManageTeamScreen from '@/screens/ManageTeamScreen';
+import PrivacyPolicy from '@/pages/PrivacyPolicy.jsx';
+import TermsOfService from '@/pages/TermsOfService.jsx';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { GameProvider } from '@/contexts/GameContext.jsx';
+import Footer from '@/components/Footer.jsx';
 
 function App() {
   const { session, loading } = useAuth();
@@ -31,33 +34,36 @@ function App() {
         <GameProvider>
           <Routes>
             <Route path="/auth" element={!session ? <AuthScreen /> : <Navigate to="/" />} />
-            <Route 
-              path="/game/:gameId" 
+            <Route
+              path="/game/:gameId"
               element={
                 <ProtectedRoute>
                   <GameScreen />
                 </ProtectedRoute>
-              } 
+              }
             />
-             <Route 
-              path="/team/:teamId" 
+             <Route
+              path="/team/:teamId"
               element={
                 <ProtectedRoute>
                   <ManageTeamScreen />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/" 
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route
+              path="/"
               element={
                 <ProtectedRoute>
                   <LobbyScreen />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route path="*" element={<Navigate to={session ? "/" : "/auth"} />} />
           </Routes>
         </GameProvider>
+        <Footer />
       </Router>
     </>
   );

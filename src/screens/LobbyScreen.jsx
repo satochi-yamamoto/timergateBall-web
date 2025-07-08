@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { Users, LogOut } from 'lucide-react';
 import CreateGameDialog from '@/components/CreateGameDialog';
 import ManageTeamsDialog from '@/components/ManageTeamsDialog';
+import Footer from '@/components/Footer.jsx';
 
 const LobbyScreen = () => {
   const { user, signOut } = useAuth();
@@ -59,6 +60,7 @@ const LobbyScreen = () => {
   }, [fetchGames]);
 
   return (
+    <>
     <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col items-center p-4 text-white">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -121,6 +123,8 @@ const LobbyScreen = () => {
       </motion.div>
       <ManageTeamsDialog open={isManageTeamsDialogOpen} onOpenChange={setManageTeamsDialogOpen} />
     </div>
+    <Footer />
+    </>
   );
 };
 
