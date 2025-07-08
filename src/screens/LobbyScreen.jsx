@@ -35,8 +35,8 @@ const LobbyScreen = () => {
         setGames([]);
         setFinishedGames([]);
       } else {
-        setGames((gameData || []).filter(g => g.status !== 'finished'));
-        setFinishedGames((gameData || []).filter(g => g.status === 'finished'));
+        setGames((gameData || []).filter(g => g.status !== 'completed' && g.status !== 'deleted'));
+        setFinishedGames((gameData || []).filter(g => g.status === 'completed'));
       }
 
     } catch (error) {
@@ -64,7 +64,10 @@ const LobbyScreen = () => {
   const handleDeleteGame = async () => {
     if (!deleteGameId) return;
     try {
-      const { error } = await supabase.from('games').delete().eq('id', deleteGameId);
+      const { error } = await supabase
+        .from('games')
+        .update({ status: 'deleted' })
+        .eq('id', deleteGameId);
       if (error) throw error;
       toast({ title: 'Jogo removido com sucesso' });
     } catch (error) {
