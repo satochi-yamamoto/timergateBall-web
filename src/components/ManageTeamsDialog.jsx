@@ -25,14 +25,31 @@ const ManageTeamsDialog = ({ open, onOpenChange }) => {
     if (!user) return;
     setLoading(true);
     try {
+      const { data: lobbyGames, error: gamesError } = await supabase
+        .from('games')
+        .select('team_red_id, team_white_id')
+        .eq('status', 'lobby');
+
+      if (gamesError) throw gamesError;
+
+      const lobbyTeamIds = lobbyGames
+        ? lobbyGames.flatMap(g => [g.team_red_id, g.team_white_id])
+        : [];
+
+      if (lobbyTeamIds.length === 0) {
+        setTeams([]);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('team_members')
         .select('team:teams(id, name)')
         .eq('user_id', user.id)
-        .eq('is_captain', true);
+        .eq('is_captain', true)
+        .in('team_id', lobbyTeamIds);
 
       if (error) throw error;
-      
+
       const captainTeams = data.map(item => item.team).filter(Boolean);
       setTeams(captainTeams);
     } catch (error) {
@@ -66,7 +83,7 @@ const ManageTeamsDialog = ({ open, onOpenChange }) => {
           {loading ? (
             <p>Carregando suas equipes...</p>
           ) : teams.length === 0 ? (
-            <p className="text-center text-gray-400">Você não é capitão de nenhuma equipe.</p>
+            <p className="text-center text-gray-400">Você não é capitão de nenhuma equipe em jogos no Lobby.</p>
           ) : (
             <ul className="space-y-3">
               {teams.map((team) => (
