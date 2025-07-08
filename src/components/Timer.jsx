@@ -20,7 +20,7 @@ const Timer = ({ timeLeft, gameState, onClick }) => {
       case 'countdown': return 'Preparando...';
       case 'running': return 'Em andamento';
       case 'paused': return 'Pausado';
-      case 'finished': return 'Finalizado';
+      case 'completed': return 'Finalizado';
       default: return '';
     }
   }

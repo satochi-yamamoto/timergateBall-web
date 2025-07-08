@@ -23,9 +23,14 @@ export const useGameState = (gameId) => {
   } : { red: 0, white: 0 };
 
   const updateRemoteState = useCallback(async (newState) => {
+    const summaryStatus =
+      newState.status === 'completed' || newState.status === 'deleted'
+        ? newState.status
+        : 'lobby';
+
     const { error } = await supabase
       .from('games')
-      .update({ game_state: newState })
+      .update({ game_state: newState, status: summaryStatus })
       .eq('id', gameId);
     
     if (error) {
@@ -36,7 +41,7 @@ export const useGameState = (gameId) => {
 
   const finishGame = useCallback(async () => {
     if (!gameState || !isCaptain) return;
-    const finishedState = { ...gameState, status: 'finished' };
+    const finishedState = { ...gameState, status: 'completed' };
     
     const { data: gameData } = await supabase
       .from('games')
@@ -192,7 +197,7 @@ export const useGameState = (gameId) => {
              if (isCaptain) {
                 finishGame();
              }
-             return { ...prev, status: 'finished' };
+             return { ...prev, status: 'completed' };
           }
           return prev;
         });
