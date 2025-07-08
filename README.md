@@ -43,3 +43,16 @@ docker run -p 4173:4173 timergateball-web
 ## Environment
 
 The Supabase keys are currently hard coded in `src/lib/customSupabaseClient.js`. For production deployments you should replace these values with environment variables and avoid committing secrets to version control.
+
+## Funcionalidades
+
+- Autenticação completa com cadastro, login e recuperação de senha.
+- Tela de lobby exibindo jogos ativos e finalizados.
+- Criação de partidas com duas equipes e dez jogadores.
+- Cronômetro de 30 minutos com contagem regressiva, pausa e reinício por duplo toque.
+- Sistema de pontuação individual (0 → 1 → 2 → 3 → 5 → 0) e somatório por equipe.
+- Atualização em tempo real do estado do jogo via Supabase.
+- Gerenciamento de equipes: adicionar ou remover membros e definir capitães.
+- Possibilidade de excluir jogos que não serão utilizados.
+- Tela de gerenciamento de conta para alteração de senha.
+- Páginas de Política de Privacidade e Termos de Uso acessíveis no rodapé.
