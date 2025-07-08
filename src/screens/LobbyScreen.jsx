@@ -106,7 +106,7 @@ const LobbyScreen = () => {
 
         <div>
           <h2 className="text-2xl font-semibold mb-4">Jogos Ativos</h2>
-          <div className="bg-gray-800/50 rounded-lg p-4 min-h-[200px]">
+          <div className="bg-gray-800/50 rounded-lg p-4 min-h-[200px] max-h-[60vh] overflow-y-auto">
             {loading ? (
               <p className="text-center text-gray-400">Carregando jogos...</p>
             ) : games.length === 0 ? (
@@ -146,7 +146,7 @@ const LobbyScreen = () => {
 
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Jogos Finalizados</h2>
-          <div className="bg-gray-800/50 rounded-lg p-4 min-h-[200px]">
+          <div className="bg-gray-800/50 rounded-lg p-4 min-h-[200px] max-h-[60vh] overflow-y-auto">
             {loading ? (
               <p className="text-center text-gray-400">Carregando jogos...</p>
             ) : finishedGames.length === 0 ? (
