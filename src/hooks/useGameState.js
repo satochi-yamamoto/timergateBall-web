@@ -100,16 +100,19 @@ export const useGameState = (gameId) => {
   
   const updatePlayerScore = useCallback((playerId) => {
     if (!gameState || !isCaptain) return;
-    // Gateball scoring sequence progresses through 1, 2, 3 and 5.
-    // After reaching 5, the score should not increase further.
-    const scoreSequence = [0, 1, 2, 3, 5];
+
+    const scoreSequence = [1, 2, 3, 5];
     const currentScore = gameState.scores[playerId];
-    const currentIndex = scoreSequence.indexOf(currentScore);
-    const nextIndex =
-      currentIndex === -1
-        ? 1
-        : Math.min(currentIndex + 1, scoreSequence.length - 1);
-    const newScore = scoreSequence[nextIndex];
+    let newScore;
+
+    if (currentScore === 5) {
+      newScore = 0; // reset after reaching 5
+    } else {
+      const currentIndex = scoreSequence.indexOf(currentScore);
+      const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % scoreSequence.length;
+      newScore = scoreSequence[nextIndex];
+    }
+
 
     const newScores = { ...gameState.scores, [playerId]: newScore };
     const newState = { ...gameState, scores: newScores };
