@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { motion } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
-import Footer from '@/components/Footer.jsx';
 
 const AccountScreen = () => {
   const { user } = useAuth();
@@ -98,10 +97,9 @@ const AccountScreen = () => {
             </Button>
           </form>
         </motion.div>
-      </div>
-      <Footer />
-    </>
-  );
-};
+        </div>
+      </>
+    );
+  };
 
 export default AccountScreen;

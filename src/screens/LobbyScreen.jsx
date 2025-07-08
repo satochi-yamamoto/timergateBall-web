@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/SupabaseAuthContext.jsx';
 import { Button } from '@/components/ui/button';
@@ -10,7 +9,6 @@ import { Users, LogOut, Trash2, Settings } from 'lucide-react';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import CreateGameDialog from '@/components/CreateGameDialog';
 import ManageTeamsDialog from '@/components/ManageTeamsDialog';
-import Footer from '@/components/Footer.jsx';
 
 const LobbyScreen = () => {
   const { user, signOut } = useAuth();
@@ -201,9 +199,8 @@ const LobbyScreen = () => {
         cancelText="Cancelar"
       />
     </div>
-    <Footer />
-    </>
-  );
-};
+      </>
+    );
+  };
 
 export default LobbyScreen;
