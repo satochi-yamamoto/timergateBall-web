@@ -11,7 +11,6 @@ import { useGameState } from '@/hooks/useGameState';
 import { useAudioManager } from '@/hooks/useAudioManager';
 import { useGame } from '@/contexts/GameContext.jsx';
 import { useWakeLock } from '@/hooks/useWakeLock';
-import Footer from '@/components/Footer.jsx';
 
 const GameScreen = () => {
   const { gameId } = useParams();
@@ -151,7 +150,6 @@ const GameScreen = () => {
         cancelText="Cancelar"
       />
     </div>
-    <Footer />
     </>
   );
 };

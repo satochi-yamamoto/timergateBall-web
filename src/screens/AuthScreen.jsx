@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { motion } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
-import Footer from '@/components/Footer.jsx';
 
 const AuthScreen = () => {
   const [authMode, setAuthMode] = useState('login'); // 'login', 'signup', 'recovery'
@@ -110,9 +109,8 @@ const AuthScreen = () => {
           )}
         </div>
       </motion.div>
-    </div>
-    <Footer />
-  </>
+      </div>
+    </>
   );
 };
 

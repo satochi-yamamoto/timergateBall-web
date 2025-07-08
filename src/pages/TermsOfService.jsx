@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import Footer from '@/components/Footer.jsx';
 
 function TermsOfService() {
   const navigate = useNavigate();
@@ -24,10 +23,9 @@ function TermsOfService() {
       <Button onClick={() => navigate('/')} variant="outline" className="border-white/20 text-white hover:bg-white/10">
         Voltar para a página inicial
       </Button>
-      </div>
-      <Footer />
-    </>
-  );
-}
+        </div>
+      </>
+    );
+  }
 
 export default TermsOfService;
