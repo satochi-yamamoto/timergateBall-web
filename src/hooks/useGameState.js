@@ -100,6 +100,7 @@ export const useGameState = (gameId) => {
   
   const updatePlayerScore = useCallback((playerId) => {
     if (!gameState || !isCaptain) return;
+
     const scoreSequence = [1, 2, 3, 5];
     const currentScore = gameState.scores[playerId];
     let newScore;
@@ -111,6 +112,7 @@ export const useGameState = (gameId) => {
       const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % scoreSequence.length;
       newScore = scoreSequence[nextIndex];
     }
+
 
     const newScores = { ...gameState.scores, [playerId]: newScore };
     const newState = { ...gameState, scores: newScores };
