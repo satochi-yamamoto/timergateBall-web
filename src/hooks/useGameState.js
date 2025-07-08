@@ -100,9 +100,12 @@ export const useGameState = (gameId) => {
   
   const updatePlayerScore = useCallback((playerId) => {
     if (!gameState || !isCaptain) return;
+    const scoreSequence = [0, 1, 2, 3, 5];
     const currentScore = gameState.scores[playerId];
-    const newScore = currentScore >= 8 ? 0 : currentScore + 1;
-    
+    const currentIndex = scoreSequence.indexOf(currentScore);
+    const nextIndex = currentIndex === -1 ? 1 : (currentIndex + 1) % scoreSequence.length;
+    const newScore = scoreSequence[nextIndex];
+
     const newScores = { ...gameState.scores, [playerId]: newScore };
     const newState = { ...gameState, scores: newScores };
     updateRemoteState(newState);
