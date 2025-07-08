@@ -7,6 +7,7 @@ import GameScreen from '@/components/GameScreen.jsx';
 import AuthScreen from '@/screens/AuthScreen';
 import LobbyScreen from '@/screens/LobbyScreen';
 import ManageTeamScreen from '@/screens/ManageTeamScreen';
+import AccountScreen from '@/screens/AccountScreen.jsx';
 import PrivacyPolicy from '@/pages/PrivacyPolicy.jsx';
 import TermsOfService from '@/pages/TermsOfService.jsx';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -42,11 +43,19 @@ function App() {
                 </ProtectedRoute>
               }
             />
-             <Route
+            <Route
               path="/team/:teamId"
               element={
                 <ProtectedRoute>
                   <ManageTeamScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <AccountScreen />
                 </ProtectedRoute>
               }
             />
