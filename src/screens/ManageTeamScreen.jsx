@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { motion } from 'framer-motion';
 import { ArrowLeft, UserPlus, Trash2, Crown, ChevronsUpDown } from 'lucide-react';
+import Footer from '@/components/Footer.jsx';
 
 const UserCombobox = ({ onSelectUser, disabled }) => {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,7 @@ const UserCombobox = ({ onSelectUser, disabled }) => {
     };
     
     const debounce = setTimeout(() => {
-        fetchUsers();
+      fetchUsers();
     }, 300);
 
     return () => clearTimeout(debounce);
@@ -218,20 +219,29 @@ const ManageTeamScreen = () => {
   };
 
   if (loading) {
-    return <div className="h-screen w-screen bg-gray-900 flex items-center justify-center text-white">Carregando equipe...</div>;
+    return (
+      <>
+        <div className="h-screen w-screen bg-gray-900 flex items-center justify-center text-white">Carregando equipe...</div>
+        <Footer />
+      </>
+    );
   }
 
   if (!isCaptain) {
     return (
-       <div className="h-screen w-screen bg-gray-900 flex flex-col items-center justify-center text-white p-4">
+      <>
+        <div className="h-screen w-screen bg-gray-900 flex flex-col items-center justify-center text-white p-4">
         <h1 className="text-2xl font-bold text-red-500 mb-4">Acesso Negado</h1>
         <p className="text-gray-400 mb-8">Você não tem permissão para gerenciar esta equipe.</p>
         <Button onClick={() => navigate('/')}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar ao Lobby</Button>
       </div>
-    )
+        <Footer />
+      </>
+    );
   }
 
   return (
+    <>
     <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black p-4 md:p-8 text-white">
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto">
         <Button onClick={() => navigate('/')} variant="ghost" className="mb-6">
@@ -291,6 +301,8 @@ const ManageTeamScreen = () => {
         </div>
       </motion.div>
     </div>
+    <Footer />
+  </>
   );
 };
 

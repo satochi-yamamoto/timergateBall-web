@@ -11,6 +11,7 @@ import { useGameState } from '@/hooks/useGameState';
 import { useAudioManager } from '@/hooks/useAudioManager';
 import { useGame } from '@/contexts/GameContext.jsx';
 import { useWakeLock } from '@/hooks/useWakeLock';
+import Footer from '@/components/Footer.jsx';
 
 const GameScreen = () => {
   const { gameId } = useParams();
@@ -101,6 +102,7 @@ const GameScreen = () => {
   }
 
   return (
+    <>
     <div className="min-h-screen w-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-4 gap-4">
       <div className="flex gap-4 h-20">
         <TeamScore team="red" score={teamScores.red} label="EQUIPE VERMELHA" />
@@ -149,6 +151,8 @@ const GameScreen = () => {
         cancelText="Cancelar"
       />
     </div>
+    <Footer />
+    </>
   );
 };
 
