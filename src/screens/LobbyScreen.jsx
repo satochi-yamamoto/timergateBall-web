@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useNavigate } from 'react-router-dom';
-import { Users, LogOut, Trash2 } from 'lucide-react';
+import { Users, LogOut, Trash2, Settings } from 'lucide-react';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import CreateGameDialog from '@/components/CreateGameDialog';
 import ManageTeamsDialog from '@/components/ManageTeamsDialog';
@@ -87,9 +87,14 @@ const LobbyScreen = () => {
       >
         <header className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Bem-vindo, {user?.email?.split('@')[0] || 'Jogador'}!</h1>
-          <Button onClick={signOut} variant="ghost" className="text-red-400 hover:text-red-500 hover:bg-red-900/20">
-            <LogOut className="mr-2 h-4 w-4" /> Sair
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => navigate('/account')} variant="ghost" className="text-gray-300 hover:text-white">
+              <Settings className="mr-2 h-4 w-4" /> Conta
+            </Button>
+            <Button onClick={signOut} variant="ghost" className="text-red-400 hover:text-red-500 hover:bg-red-900/20">
+              <LogOut className="mr-2 h-4 w-4" /> Sair
+            </Button>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
