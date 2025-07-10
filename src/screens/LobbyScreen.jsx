@@ -86,9 +86,11 @@ const LobbyScreen = () => {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-4xl p-6"
       >
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Bem-vindo, {user?.email?.split('@')[0] || 'Jogador'}!</h1>
-          <div className="flex gap-2">
+        <header className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-8">
+          <h1 className="text-3xl font-bold text-center sm:text-left break-words">
+            Bem-vindo, {user?.email?.split('@')[0] || 'Jogador'}!
+          </h1>
+          <div className="flex gap-2 flex-shrink-0">
             <Button onClick={() => navigate('/account')} variant="ghost" className="text-gray-300 hover:text-white">
               <Settings className="mr-2 h-4 w-4" /> Conta
             </Button>
