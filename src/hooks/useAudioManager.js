@@ -3,6 +3,7 @@ import { useCallback, useRef } from 'react';
 
 export const useAudioManager = () => {
   const audioContextRef = useRef(null);
+  const audioFilesRef = useRef({});
   const isInitializedRef = useRef(false);
 
   // Initialize Web Audio API
@@ -11,6 +12,13 @@ export const useAudioManager = () => {
 
     try {
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      audioFilesRef.current = {
+        parte1: new Audio('/sound/Parte-1.mp3'),
+        parte2: new Audio('/sound/Parte-2.mp3'),
+        parte3: new Audio('/sound/Parte-3.mp3'),
+        parte4: new Audio('/sound/Parte-4.mp3'),
+        parte5: new Audio('/sound/Parte-5.mp3'),
+      };
       isInitializedRef.current = true;
     } catch (error) {
       console.warn('Web Audio API not supported:', error);
@@ -37,32 +45,50 @@ export const useAudioManager = () => {
     oscillator.stop(audioContextRef.current.currentTime + duration / 1000);
   }, []);
 
+  // Play an HTML audio file and return a promise when it ends
+  const playAudioFile = useCallback((key) => {
+    const audio = audioFilesRef.current[key];
+    if (!audio) return Promise.resolve();
+    audio.currentTime = 0;
+    return new Promise((resolve) => {
+      audio.onended = () => resolve();
+      audio.play().catch(() => resolve());
+    });
+  }, []);
+
   // Play different sound types
   const playSound = useCallback((soundType) => {
-    if (!isInitializedRef.current) return;
+    if (!isInitializedRef.current) return Promise.resolve();
 
     switch (soundType) {
       case 'beep':
         generateBeep(1000, 150, 'sine');
-        break;
+        return Promise.resolve();
       case 'alert':
         generateBeep(800, 300, 'square');
-        break;
+        return Promise.resolve();
+      case 'parte1':
+      case 'parte2':
+      case 'parte3':
+      case 'parte4':
+      case 'parte5':
+        return playAudioFile(soundType);
       case 'gameStart':
         // Play sequence for game start
         setTimeout(() => generateBeep(600, 200), 0);
         setTimeout(() => generateBeep(800, 200), 250);
         setTimeout(() => generateBeep(1000, 400), 500);
-        break;
+        return Promise.resolve();
       case 'gameEnd':
         // Play sequence for game end
         generateBeep(400, 800, 'sawtooth');
-        break;
+        return Promise.resolve();
       case 'score':
         generateBeep(1200, 100, 'sine');
-        break;
+        return Promise.resolve();
       default:
         generateBeep();
+        return Promise.resolve();
     }
   }, [generateBeep]);
 

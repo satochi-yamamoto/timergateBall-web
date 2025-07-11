@@ -63,25 +63,10 @@ export const useGameState = (gameId) => {
   
   const startGame = useCallback(() => {
     if (!gameState || (gameState.status !== 'lobby' && gameState.status !== 'paused') || !isCaptain) return;
-    
-    let countdown = 5;
-    const newStatus = gameState.status === 'lobby' ? 'countdown' : 'running';
-    const tempState = { ...gameState, status: newStatus };
-    setGameState(tempState);
-    
-    if (newStatus === 'countdown') {
-      const countdownInterval = setInterval(() => {
-        countdown--;
-        if (countdown <= 0) {
-          clearInterval(countdownInterval);
-          const runningState = { ...tempState, status: 'running' };
-          setGameState(runningState);
-          updateRemoteState(runningState);
-        }
-      }, 1000);
-    } else {
-        updateRemoteState(tempState);
-    }
+
+    const newState = { ...gameState, status: 'running' };
+    setGameState(newState);
+    updateRemoteState(newState);
   }, [gameState, updateRemoteState, isCaptain]);
 
   const pauseGame = useCallback(() => {
