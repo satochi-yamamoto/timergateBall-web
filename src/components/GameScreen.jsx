@@ -110,8 +110,8 @@ const GameScreen = () => {
 
   return (
     <>
-    <div className="min-h-screen w-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-4 gap-4">
-      <div className="flex gap-4 h-20">
+    <div className="min-h-screen w-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-2 sm:p-4 gap-4">
+      <div className="flex gap-2 sm:gap-4 h-16 sm:h-20">
         <TeamScore team="red" score={teamScores.red} label="EQUIPE VERMELHA" />
         <TeamScore team="white" score={teamScores.white} label="EQUIPE BRANCA" />
       </div>
@@ -120,7 +120,7 @@ const GameScreen = () => {
         <Timer timeLeft={timeLeft} gameState={status} onClick={handleTimerClick} />
       </div>
 
-      <div className="grid grid-cols-5 grid-rows-2 gap-3 h-32">
+      <div className="grid grid-cols-5 grid-rows-2 gap-2 sm:gap-3 h-28 sm:h-32">
         {playerScores && Object.keys(playerScores).map((pId) => {
           const playerId = parseInt(pId, 10);
           return (
@@ -136,7 +136,7 @@ const GameScreen = () => {
       </div>
 
       {isCaptain && (
-        <div className="flex justify-center gap-4 h-12">
+        <div className="flex justify-center gap-2 sm:gap-4 h-10 sm:h-12">
           <Button variant="outline" size="sm" onClick={handleTimerClick} className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700">
             {status === 'running' ? <><Pause className="w-4 h-4 mr-2" /> Pausar</> : <><Play className="w-4 h-4 mr-2" /> Iniciar</>}
           </Button>
