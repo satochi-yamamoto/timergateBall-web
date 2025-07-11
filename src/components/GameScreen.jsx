@@ -54,7 +54,10 @@ const GameScreen = () => {
     if (now - lastTapTime < 300) {
       setShowConfirmDialog(true);
     } else {
-      if (status === 'lobby' || status === 'paused') {
+      if (status === 'lobby') {
+        await playSound('parte1');
+        startGame();
+      } else if (status === 'paused') {
         startGame();
       } else if (status === 'running') {
         pauseGame();
@@ -84,10 +87,15 @@ const GameScreen = () => {
     if (status === 'running' && isAudioInitialized) {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
-      
+      const elapsed = 1800 - timeLeft;
+
+      if (elapsed === 900) playSound('parte2');
+      if (elapsed === 1200) playSound('parte3');
+      if (elapsed === 1500) playSound('parte4');
+      if (timeLeft === 0) playSound('parte5');
+
       if (seconds === 0 && [15, 10, 5, 2, 1].includes(minutes)) playSound('alert');
       if (timeLeft <= 10 && timeLeft > 0) playSound('beep');
-      if (timeLeft === 0) playSound('gameEnd');
     }
   }, [timeLeft, status, isAudioInitialized, playSound]);
 
