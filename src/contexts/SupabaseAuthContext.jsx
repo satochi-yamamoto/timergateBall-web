@@ -78,6 +78,8 @@ export const AuthProvider = ({ children }) => {
         title: "Sign out Failed",
         description: error.message || "Something went wrong",
       });
+    } else {
+      window.location.href = "/";
     }
 
     return { error };
