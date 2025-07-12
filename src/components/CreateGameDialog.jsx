@@ -98,7 +98,7 @@ const CreateGameDialog = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="w-full h-28 text-lg bg-yellow-500 hover:bg-yellow-600 text-black font-bold flex flex-col gap-1">
-          <PlusCircle size={28} />
+          <PlusCircle size={24} />
           Criar Novo Jogo
         </Button>
       </DialogTrigger>

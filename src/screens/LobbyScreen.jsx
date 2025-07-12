@@ -92,10 +92,10 @@ const LobbyScreen = () => {
           </h1>
           <div className="flex gap-2 flex-shrink-0">
             <Button onClick={() => navigate('/account')} variant="ghost" className="text-gray-300 hover:text-white">
-              <Settings className="mr-2 h-4 w-4" /> Conta
+              <Settings className="mr-2 h-3 w-3" /> Conta
             </Button>
             <Button onClick={signOut} variant="ghost" className="text-red-400 hover:text-red-500 hover:bg-red-900/20">
-              <LogOut className="mr-2 h-4 w-4" /> Sair
+              <LogOut className="mr-2 h-3 w-3" /> Sair
             </Button>
           </div>
         </header>
@@ -106,7 +106,7 @@ const LobbyScreen = () => {
           </motion.div>
           <motion.div whileHover={{ scale: 1.03 }}>
              <Button onClick={() => setManageTeamsDialogOpen(true)} variant="outline" className="w-full h-28 text-lg bg-transparent border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black flex flex-col gap-1">
-              <Users size={28}/>
+              <Users size={24}/>
               Gerenciar Equipes
             </Button>
           </motion.div>
@@ -141,7 +141,7 @@ const LobbyScreen = () => {
                           Entrar no Jogo
                         </Button>
                         <Button variant="destructive" size="icon" onClick={() => setDeleteGameId(game.id)}>
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
                     </motion.li>
@@ -181,7 +181,7 @@ const LobbyScreen = () => {
                           Ver Jogo
                         </Button>
                         <Button variant="destructive" size="icon" onClick={() => setDeleteGameId(game.id)}>
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
                     </motion.li>
