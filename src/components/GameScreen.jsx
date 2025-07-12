@@ -138,10 +138,10 @@ const GameScreen = () => {
       {isCaptain && (
         <div className="flex justify-center gap-2 sm:gap-4 h-10 sm:h-12">
           <Button variant="outline" size="sm" onClick={handleTimerClick} className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700">
-            {status === 'running' ? <><Pause className="w-4 h-4 mr-2" /> Pausar</> : <><Play className="w-4 h-4 mr-2" /> Iniciar</>}
+            {status === 'running' ? <><Pause className="w-3 h-3 mr-2" /> Pausar</> : <><Play className="w-3 h-3 mr-2" /> Iniciar</>}
           </Button>
           <Button variant="outline" size="sm" onClick={() => setShowConfirmDialog(true)} className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700">
-            <RotateCcw className="w-4 h-4 mr-2" /> Reiniciar
+            <RotateCcw className="w-3 h-3 mr-2" /> Reiniciar
           </Button>
         </div>
       )}

@@ -73,7 +73,7 @@ const UserCombobox = ({ onSelectUser, disabled }) => {
           {value
             ? users.find((user) => user.id === value)?.email || 'Selecione um jogador'
             : 'Selecione um jogador...'}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0 bg-gray-800 border-gray-700 text-white">
@@ -231,7 +231,7 @@ const ManageTeamScreen = () => {
         <div className="h-screen w-screen bg-gray-900 flex flex-col items-center justify-center text-white p-4">
         <h1 className="text-2xl font-bold text-red-500 mb-4">Acesso Negado</h1>
         <p className="text-gray-400 mb-8">Você não tem permissão para gerenciar esta equipe.</p>
-        <Button onClick={() => navigate('/')}><ArrowLeft className="mr-2 h-4 w-4" /> Voltar ao Lobby</Button>
+        <Button onClick={() => navigate('/')}><ArrowLeft className="mr-2 h-3 w-3" /> Voltar ao Lobby</Button>
       </div>
         </>
       );
@@ -242,7 +242,7 @@ const ManageTeamScreen = () => {
     <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black p-4 md:p-8 text-white">
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto">
         <Button onClick={() => navigate('/')} variant="ghost" className="mb-6">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Voltar ao Lobby
+          <ArrowLeft className="mr-2 h-3 w-3" /> Voltar ao Lobby
         </Button>
 
         <h1 className="text-4xl font-bold mb-2">Gerenciar Equipe</h1>
@@ -253,7 +253,7 @@ const ManageTeamScreen = () => {
           <div className="flex flex-col sm:flex-row gap-4">
              <UserCombobox onSelectUser={setSelectedUser} disabled={false} />
             <Button onClick={handleAddMember} className="bg-yellow-500 hover:bg-yellow-600 text-black">
-              <UserPlus className="mr-2 h-4 w-4" /> Adicionar
+              <UserPlus className="mr-2 h-3 w-3" /> Adicionar
             </Button>
           </div>
         </div>
@@ -270,7 +270,7 @@ const ManageTeamScreen = () => {
                 className="flex items-center justify-between p-4 bg-gray-700/70 rounded-lg"
               >
                 <div className="flex items-center gap-3">
-                   {member.is_captain && <Crown className="h-5 w-5 text-yellow-400" />}
+                   {member.is_captain && <Crown className="h-4 w-4 text-yellow-400" />}
                   <span className="font-medium">{member.user.email}</span>
                 </div>
                 <div className="flex items-center gap-4">
@@ -289,7 +289,7 @@ const ManageTeamScreen = () => {
                     onClick={() => handleRemoveMember(member.user.id)}
                     disabled={member.user.id === user.id}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
               </motion.li>
