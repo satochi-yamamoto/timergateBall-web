@@ -4,6 +4,7 @@ import NoSleep from 'nosleep.js';
 export const useWakeLock = (isActive) => {
   const wakeLockRef = useRef(null);
   const noSleepRef = useRef(null);
+  const interactionRequestedRef = useRef(false);
 
   useEffect(() => {
     const requestWakeLock = async () => {
@@ -42,8 +43,21 @@ export const useWakeLock = (isActive) => {
       }
     };
 
+    const handleUserInteraction = () => {
+      requestWakeLock();
+      interactionRequestedRef.current = true;
+      document.removeEventListener('touchstart', handleUserInteraction);
+      document.removeEventListener('click', handleUserInteraction);
+    };
+
     if (isActive) {
       requestWakeLock();
+      if (!interactionRequestedRef.current) {
+        document.addEventListener('touchstart', handleUserInteraction, { once: true });
+        document.addEventListener('click', handleUserInteraction, { once: true });
+      }
+    } else {
+      interactionRequestedRef.current = false;
     }
 
     const handleVisibilityChange = () => {
@@ -57,6 +71,8 @@ export const useWakeLock = (isActive) => {
 
     return () => {
       releaseWakeLock();
+      document.removeEventListener('touchstart', handleUserInteraction);
+      document.removeEventListener('click', handleUserInteraction);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       document.removeEventListener('fullscreenchange', handleVisibilityChange);
     };
