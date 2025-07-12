@@ -84,7 +84,7 @@ const GameScreen = () => {
   }, [resetGame, toast, isCaptain]);
 
   useEffect(() => {
-    if (status === 'running' && isAudioInitialized) {
+    if (status === 'running') {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
       const elapsed = 1800 - timeLeft;
@@ -97,7 +97,7 @@ const GameScreen = () => {
       if (seconds === 0 && [15, 10, 5, 2, 1].includes(minutes)) playSound('alert');
       if (timeLeft <= 10 && timeLeft > 0) playSound('beep');
     }
-  }, [timeLeft, status, isAudioInitialized, playSound]);
+  }, [timeLeft, status, playSound]);
 
   if (loading) {
     return <div className="min-h-screen w-screen overflow-y-auto bg-gray-900 flex items-center justify-center text-white">Carregando Jogo...</div>;
