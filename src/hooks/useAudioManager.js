@@ -1,5 +1,5 @@
 
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 
 export const useAudioManager = () => {
   const audioContextRef = useRef(null);
@@ -91,6 +91,22 @@ export const useAudioManager = () => {
         return Promise.resolve();
     }
   }, [generateBeep]);
+
+  useEffect(() => {
+    const handleInteraction = () => {
+      initializeAudio();
+    };
+
+    if (!isInitializedRef.current) {
+      document.addEventListener('touchstart', handleInteraction, { once: true });
+      document.addEventListener('click', handleInteraction, { once: true });
+    }
+
+    return () => {
+      document.removeEventListener('touchstart', handleInteraction);
+      document.removeEventListener('click', handleInteraction);
+    };
+  }, [initializeAudio]);
 
   return {
     initializeAudio,
