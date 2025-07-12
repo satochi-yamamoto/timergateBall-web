@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Timer from '@/components/Timer';
 import PlayerScore from '@/components/PlayerScore';
 import TeamScore from '@/components/TeamScore';
 import { Button } from '@/components/ui/button';
 import { useLocalGame } from '@/hooks/useLocalGame';
+import { useAudioManager } from '@/hooks/useAudioManager';
 
 const HomeScreen = () => {
   const navigate = useNavigate();
@@ -19,10 +20,43 @@ const HomeScreen = () => {
     updatePlayerScore
   } = useLocalGame();
 
-  const handleTimer = () => {
-    if (status === 'running') pauseGame();
-    else startGame();
-  };
+  const { playSound, initializeAudio } = useAudioManager();
+  const [isAudioInitialized, setIsAudioInitialized] = useState(false);
+
+  const handleFirstInteraction = useCallback(async () => {
+    if (!isAudioInitialized) {
+      await initializeAudio();
+      setIsAudioInitialized(true);
+    }
+  }, [isAudioInitialized, initializeAudio]);
+
+  const handleTimer = useCallback(async () => {
+    await handleFirstInteraction();
+    if (status === 'lobby') {
+      await playSound('parte1');
+      startGame();
+    } else if (status === 'paused') {
+      startGame();
+    } else if (status === 'running') {
+      pauseGame();
+    }
+  }, [status, pauseGame, startGame, handleFirstInteraction, playSound]);
+
+  useEffect(() => {
+    if (status === 'running') {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      const elapsed = 1800 - timeLeft;
+
+      if (elapsed === 900) playSound('parte2');
+      if (elapsed === 1200) playSound('parte3');
+      if (elapsed === 1500) playSound('parte4');
+      if (timeLeft === 0) playSound('parte5');
+
+      if (seconds === 0 && [15, 10, 5, 2, 1].includes(minutes)) playSound('alert');
+      if (timeLeft <= 10 && timeLeft > 0) playSound('beep');
+    }
+  }, [timeLeft, status, playSound]);
 
   return (
     <div className="min-h-screen w-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-2 sm:p-4 gap-4">
