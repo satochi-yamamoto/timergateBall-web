@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 const PlayerScore = ({ playerId, score, isRedTeam, onClick }) => {
   return (
     <motion.div
-      className={`rounded-lg cursor-pointer select-none flex flex-col items-center justify-center transition-all duration-200 ${
-        isRedTeam 
-          ? 'bg-red-600 text-white hover:bg-red-500 active:bg-red-700' 
-          : 'bg-white text-black border-2 border-gray-300 hover:bg-gray-50 active:bg-gray-200'
+      className={`rounded-lg border-2 box-border aspect-square w-full cursor-pointer select-none flex flex-col items-center justify-center transition-all duration-200 ${
+        isRedTeam
+          ? 'bg-red-600 text-white border-red-700 hover:bg-red-500 active:bg-red-700'
+          : 'bg-white text-black border-gray-300 hover:bg-gray-50 active:bg-gray-200'
       }`}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
@@ -32,3 +32,4 @@ const PlayerScore = ({ playerId, score, isRedTeam, onClick }) => {
 };
 
 export default PlayerScore;
+
