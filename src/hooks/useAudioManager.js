@@ -21,7 +21,8 @@ export const useAudioManager = () => {
       };
       isInitializedRef.current = true;
     } catch (error) {
-      console.warn('Web Audio API not supported:', error);
+      // Web Audio API not supported - fallback to HTML5 audio
+      isInitializedRef.current = false;
     }
   }, []);
 
@@ -90,7 +91,7 @@ export const useAudioManager = () => {
         generateBeep();
         return Promise.resolve();
     }
-  }, [generateBeep]);
+  }, [generateBeep, playAudioFile]);
 
   useEffect(() => {
     const handleInteraction = () => {
