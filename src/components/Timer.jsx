@@ -37,7 +37,7 @@ const Timer = ({ timeLeft, gameState, onClick }) => {
       <div className="absolute inset-0 rounded-full bg-yellow-400 opacity-20 blur-xl animate-pulse" />
       
       {/* Main timer circle */}
-      <div className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center">
+      <div className="relative w-56 h-56 sm:w-72 sm:h-72 flex items-center justify-center">
         {/* Background circle */}
         <svg className="absolute w-full h-full transform -rotate-90" viewBox="0 0 320 320">
           <circle
