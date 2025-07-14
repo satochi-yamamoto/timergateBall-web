@@ -72,7 +72,7 @@ const Timer = ({ timeLeft, gameState, onClick }) => {
         {/* Timer display */}
         <div className="relative z-10 text-center">
           <motion.div
-            className={`timer-font text-7xl font-bold ${
+            className={`timer-font text-6xl sm:text-7xl font-bold ${
               isCriticalTime ? 'text-red-400' : isLowTime ? 'text-yellow-300' : 'text-yellow-400'
             }`}
             animate={isCriticalTime && gameState === 'running' ? { 
