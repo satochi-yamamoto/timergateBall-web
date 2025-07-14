@@ -123,8 +123,8 @@ const GameScreen = () => {
 
   return (
     <>
-    <div className="min-h-screen w-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-2 sm:p-4 gap-4">
-      <div className="flex gap-2 sm:gap-4 h-16 sm:h-20">
+    <div className="min-h-screen w-screen overflow-y-auto bg-gradient-to-br from-gray-800 via-gray-900 to-black flex flex-col p-2 sm:p-4 gap-2">
+      <div className="flex gap-2 sm:gap-4 h-14 sm:h-16">
         <TeamScore team="red" score={teamScores.red} label="EQUIPE VERMELHA" />
         <TeamScore team="white" score={teamScores.white} label="EQUIPE BRANCA" />
       </div>
