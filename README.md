@@ -1,9 +1,4 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/README.md b/README.md
-index e043470f4afccd21009bfe5c73a7e4a6577ef5c2..a0741c5128527002312096d161e90cf69397fe73 100644
---- a/README.md
-+++ b/README.md
-@@ -1,58 +1,60 @@
+
  # TimerGateBall Web
  
 -This project uses Supabase as its backend. If you encounter `infinite recursion detected in policy` errors when fetching data from `team_members` or `teams`, apply the SQL in `docs/supabase-policies.sql` to reset the RLS policies.
