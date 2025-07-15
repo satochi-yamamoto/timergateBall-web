@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { supabase } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext.jsx';
 import { useGame } from '@/contexts/GameContext.jsx';
@@ -13,14 +13,20 @@ export const useGameState = (gameId) => {
   
   const localTimerRef = useRef(null);
 
-  const teamScores = gameState ? {
-    red: Object.entries(gameState.scores)
+  // Memoize team scores calculation for better performance
+  const teamScores = useMemo(() => {
+    if (!gameState) return { red: 0, white: 0 };
+    
+    const redScore = Object.entries(gameState.scores)
       .filter(([playerId]) => parseInt(playerId) % 2 === 1)
-      .reduce((sum, [, score]) => sum + score, 0),
-    white: Object.entries(gameState.scores)
+      .reduce((sum, [, score]) => sum + score, 0);
+    
+    const whiteScore = Object.entries(gameState.scores)
       .filter(([playerId]) => parseInt(playerId) % 2 === 0)
-      .reduce((sum, [, score]) => sum + score, 0)
-  } : { red: 0, white: 0 };
+      .reduce((sum, [, score]) => sum + score, 0);
+    
+    return { red: redScore, white: whiteScore };
+  }, [gameState?.scores]);
 
   const updateRemoteState = useCallback(async (newState) => {
     const summaryStatus =

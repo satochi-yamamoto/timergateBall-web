@@ -1,15 +1,19 @@
 
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-const PlayerScore = ({ playerId, score, isRedTeam, onClick }) => {
+const PlayerScore = memo(({ playerId, score, isRedTeam, onClick }) => {
+  const buttonClasses = useMemo(() => {
+    return `rounded-lg border-2 box-border aspect-square w-full cursor-pointer select-none flex flex-col items-center justify-center transition-all duration-200 ${
+      isRedTeam
+        ? 'bg-red-600 text-white border-red-700 hover:bg-red-500 active:bg-red-700'
+        : 'bg-white text-black border-gray-300 hover:bg-gray-50 active:bg-gray-200'
+    }`;
+  }, [isRedTeam]);
+
   return (
     <motion.div
-      className={`rounded-lg border-2 box-border aspect-square w-full cursor-pointer select-none flex flex-col items-center justify-center transition-all duration-200 ${
-        isRedTeam
-          ? 'bg-red-600 text-white border-red-700 hover:bg-red-500 active:bg-red-700'
-          : 'bg-white text-black border-gray-300 hover:bg-gray-50 active:bg-gray-200'
-      }`}
+      className={buttonClasses}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
       whileHover={{ scale: 1.02 }}
@@ -29,7 +33,9 @@ const PlayerScore = ({ playerId, score, isRedTeam, onClick }) => {
       </motion.div>
     </motion.div>
   );
-};
+});
+
+PlayerScore.displayName = 'PlayerScore';
 
 export default PlayerScore;
 

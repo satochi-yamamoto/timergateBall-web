@@ -1,6 +1,7 @@
 import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { createLogger, defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const isDev = process.env.NODE_ENV !== 'production';
 let inlineEditPlugin, editModeDevPlugin;
@@ -194,7 +195,13 @@ export default defineConfig({
 	plugins: [
 		...(isDev ? [inlineEditPlugin(), editModeDevPlugin()] : []),
 		react(),
-		addTransformIndexHtml
+		addTransformIndexHtml,
+		visualizer({
+			filename: 'dist/stats.html',
+			open: false,
+			gzipSize: true,
+			brotliSize: true,
+		}),
 	],
 	server: {
 		cors: true,
@@ -216,7 +223,25 @@ export default defineConfig({
 				'@babel/traverse',
 				'@babel/generator',
 				'@babel/types'
-			]
-		}
+			],
+			output: {
+				manualChunks: {
+					'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+					'ui-vendor': ['@radix-ui/react-alert-dialog', '@radix-ui/react-avatar', '@radix-ui/react-checkbox', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-label', '@radix-ui/react-popover', '@radix-ui/react-slider', '@radix-ui/react-slot', '@radix-ui/react-switch', '@radix-ui/react-tabs', '@radix-ui/react-toast'],
+					'animation-vendor': ['framer-motion'],
+					'supabase-vendor': ['@supabase/supabase-js'],
+					'utils-vendor': ['clsx', 'class-variance-authority', 'tailwind-merge', 'cmdk', 'lucide-react', 'nosleep.js', 'react-helmet']
+				}
+			}
+		},
+		chunkSizeWarningLimit: 1000,
+		sourcemap: false,
+		minify: 'terser',
+		terserOptions: {
+			compress: {
+				drop_console: true,
+				drop_debugger: true,
+			},
+		},
 	}
 });

@@ -1,20 +1,26 @@
 
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-const Timer = ({ timeLeft, gameState, onClick }) => {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  
-  const isLowTime = timeLeft <= 300; // 5 minutes or less
-  const isCriticalTime = timeLeft <= 60; // 1 minute or less
-  
-  const circumference = 2 * Math.PI * 140; // radius = 140
-  const progress = timeLeft / 1800; // 30 minutes = 1800 seconds
-  const strokeDashoffset = circumference * (1 - progress);
+const Timer = memo(({ timeLeft, gameState, onClick }) => {
+  const { minutes, seconds, timeString, isLowTime, isCriticalTime } = useMemo(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    const isLowTime = timeLeft <= 300; // 5 minutes or less
+    const isCriticalTime = timeLeft <= 60; // 1 minute or less
+    
+    return { minutes, seconds, timeString, isLowTime, isCriticalTime };
+  }, [timeLeft]);
 
-  const getStatusText = () => {
+  const { circumference, strokeDashoffset } = useMemo(() => {
+    const circumference = 2 * Math.PI * 140; // radius = 140
+    const progress = timeLeft / 1800; // 30 minutes = 1800 seconds
+    const strokeDashoffset = circumference * (1 - progress);
+    return { circumference, strokeDashoffset };
+  }, [timeLeft]);
+
+  const statusText = useMemo(() => {
     switch(gameState) {
       case 'lobby': return 'Toque para iniciar';
       case 'countdown': return 'Preparando...';
@@ -23,7 +29,13 @@ const Timer = ({ timeLeft, gameState, onClick }) => {
       case 'completed': return 'Finalizado';
       default: return '';
     }
-  }
+  }, [gameState]);
+
+  const timerColorClass = useMemo(() => {
+    if (isCriticalTime) return 'text-red-400';
+    if (isLowTime) return 'text-yellow-300';
+    return 'text-yellow-400';
+  }, [isCriticalTime, isLowTime]);
 
   return (
     <motion.div
@@ -72,9 +84,7 @@ const Timer = ({ timeLeft, gameState, onClick }) => {
         {/* Timer display */}
         <div className="relative z-10 text-center">
           <motion.div
-            className={`timer-font text-6xl sm:text-7xl font-bold ${
-              isCriticalTime ? 'text-red-400' : isLowTime ? 'text-yellow-300' : 'text-yellow-400'
-            }`}
+            className={`timer-font text-6xl sm:text-7xl font-bold ${timerColorClass}`}
             animate={isCriticalTime && gameState === 'running' ? { 
               textShadow: [
                 '0 0 10px rgba(239, 68, 68, 0.5)',
@@ -89,7 +99,7 @@ const Timer = ({ timeLeft, gameState, onClick }) => {
           
           {/* Game state indicator */}
           <div className="mt-2 text-sm font-medium text-gray-400">
-            {getStatusText()}
+            {statusText}
           </div>
         </div>
         
@@ -103,6 +113,8 @@ const Timer = ({ timeLeft, gameState, onClick }) => {
       </div>
     </motion.div>
   );
-};
+});
+
+Timer.displayName = 'Timer';
 
 export default Timer;
