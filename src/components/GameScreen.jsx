@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import { useAudioManager } from '@/hooks/useAudioManager';
 import { useGame } from '@/contexts/GameContext.jsx';
 import { useWakeLock } from '@/hooks/useWakeLock';
 
-const GameScreen = () => {
+const GameScreen = memo(() => {
   const { gameId } = useParams();
   const { toast } = useToast();
   const { isCaptain } = useGame();
@@ -64,7 +64,7 @@ const GameScreen = () => {
       }
     }
     setLastTapTime(now);
-  }, [status, lastTapTime, startGame, pauseGame, handleFirstInteraction, isCaptain, toast]);
+  }, [status, lastTapTime, startGame, pauseGame, handleFirstInteraction, isCaptain, toast, playSound]);
 
   const handlePlayerScoreUpdate = useCallback(async (playerId) => {
     await handleFirstInteraction();
@@ -184,6 +184,8 @@ const GameScreen = () => {
     </div>
     </>
   );
-};
+});
+
+GameScreen.displayName = 'GameScreen';
 
 export default GameScreen;

@@ -12,6 +12,13 @@
   --black-text: #000000;
 }
 
+/* Performance optimizations */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   @apply bg-gray-900 text-white;
   overflow-x: hidden;
@@ -19,16 +26,21 @@ body {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .timer-font {
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: 700;
+  will-change: transform;
 }
 
 .score-font {
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
+  will-change: transform;
 }
 
 .pulse-animation {

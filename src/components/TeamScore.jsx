@@ -1,17 +1,21 @@
 
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-const TeamScore = ({ team, score, label }) => {
+const TeamScore = memo(({ team, score, label }) => {
   const isRed = team === 'red';
+  
+  const containerClasses = useMemo(() => {
+    return `flex-1 rounded-lg flex flex-col items-center justify-center ${
+      isRed 
+        ? 'bg-red-600 text-white' 
+        : 'bg-white text-black border-2 border-gray-300'
+    }`;
+  }, [isRed]);
   
   return (
     <motion.div
-      className={`flex-1 rounded-lg flex flex-col items-center justify-center ${
-        isRed 
-          ? 'bg-red-600 text-white' 
-          : 'bg-white text-black border-2 border-gray-300'
-      }`}
+      className={containerClasses}
       whileTap={{ scale: 0.98 }}
       layout
     >
@@ -29,6 +33,8 @@ const TeamScore = ({ team, score, label }) => {
       </motion.div>
     </motion.div>
   );
-};
+});
+
+TeamScore.displayName = 'TeamScore';
 
 export default TeamScore;
