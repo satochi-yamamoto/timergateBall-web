@@ -18,7 +18,7 @@ function TermsOfService() {
         Este serviço é fornecido "como está" sem garantias de qualquer tipo. Não armazenamos permanentemente suas informações e o conteúdo gerado é de sua responsabilidade.
       </p>
       <p className="mb-4 text-gray-300">
-        Ao utilizar o gerador de currículos você concorda em usar as informações geradas de forma ética e legal.
+        Ao utilizar o Gateball Timer você concorda em usar as informações geradas de forma ética e legal.
       </p>
       <Button onClick={() => navigate('/')} variant="outline" className="border-white/20 text-white hover:bg-white/10">
         Voltar para a página inicial
