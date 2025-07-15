@@ -85,7 +85,7 @@ function App() {
                 path="/"
                 element={session ? <Navigate to="/lobby" /> : <HomeScreen />} 
               />
-              <Route path="*" element={<Navigate to={session ? "/lobby" : "/auth"} />} />
+              <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </Suspense>
         </GameProvider>
