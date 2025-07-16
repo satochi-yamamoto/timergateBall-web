@@ -23,11 +23,13 @@ const GameScreen = memo(() => {
     status,
     timeLeft,
     playerScores,
+    playerOuts,
     teamScores,
     startGame,
     pauseGame,
     resetGame,
     updatePlayerScore,
+    togglePlayerOut,
   } = useGameState(gameId);
   
   useWakeLock(status === 'running');
@@ -35,6 +37,7 @@ const GameScreen = memo(() => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [lastTapTime, setLastTapTime] = useState(0);
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
+  const [playerTapTimes, setPlayerTapTimes] = useState({});
 
   const handleFirstInteraction = useCallback(async () => {
     if (!isAudioInitialized) {
@@ -72,9 +75,16 @@ const GameScreen = memo(() => {
       toast({ title: "Apenas capitães podem alterar o placar.", variant: "destructive"});
       return;
     }
-    updatePlayerScore(playerId);
-    if (navigator.vibrate) navigator.vibrate(50);
-  }, [updatePlayerScore, handleFirstInteraction, isCaptain, toast]);
+    const now = Date.now();
+    const last = playerTapTimes[playerId] || 0;
+    if (now - last < 300) {
+      togglePlayerOut(playerId);
+    } else {
+      updatePlayerScore(playerId);
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+    setPlayerTapTimes((prev) => ({ ...prev, [playerId]: now }));
+  }, [updatePlayerScore, togglePlayerOut, handleFirstInteraction, isCaptain, toast, playerTapTimes]);
 
   const handleResetConfirm = useCallback(() => {
     if (!isCaptain) return;
@@ -137,6 +147,7 @@ const GameScreen = memo(() => {
               playerId={playerId}
               score={playerScores[playerId]}
               isRedTeam={true}
+              isOut={playerOuts?.[playerId]}
               onClick={() => handlePlayerScoreUpdate(playerId)}
             />
           ))}
@@ -153,6 +164,7 @@ const GameScreen = memo(() => {
               playerId={playerId}
               score={playerScores[playerId]}
               isRedTeam={false}
+              isOut={playerOuts?.[playerId]}
               onClick={() => handlePlayerScoreUpdate(playerId)}
             />
           ))}
