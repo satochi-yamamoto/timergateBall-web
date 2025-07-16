@@ -65,11 +65,16 @@ const CreateGameDialog = () => {
 
       // 5. Create Game with initial state
       const initialScores = {};
-      for (let i = 1; i <= 10; i++) initialScores[i] = 0;
+      const initialOuts = {};
+      for (let i = 1; i <= 10; i++) {
+        initialScores[i] = 0;
+        initialOuts[i] = false;
+      }
       const initialGameState = {
         status: 'lobby',
         timeLeft: 1800,
         scores: initialScores,
+        outs: initialOuts,
       };
 
       const { data: gameData, error: gameError } = await supabase

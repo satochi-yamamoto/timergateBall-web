@@ -2,7 +2,7 @@
 import React, { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
-const PlayerScore = memo(({ playerId, score, isRedTeam, onClick }) => {
+const PlayerScore = memo(({ playerId, score, isRedTeam, isOut = false, onClick }) => {
   const buttonClasses = useMemo(() => {
     return `rounded-lg border-2 box-border aspect-square w-full cursor-pointer select-none flex flex-col items-center justify-center transition-all duration-200 ${
       isRedTeam
@@ -19,8 +19,9 @@ const PlayerScore = memo(({ playerId, score, isRedTeam, onClick }) => {
       whileHover={{ scale: 1.02 }}
       layout
     >
-      <div className="text-xs font-medium opacity-90">
-        Jogador {playerId}
+      <div className="text-xs font-medium opacity-90 flex items-center gap-1">
+        <span>Jogador {playerId}</span>
+        {isOut && <span className="text-yellow-200 text-[10px] font-bold">OUT</span>}
       </div>
       <motion.div
         className="score-font text-2xl font-bold"

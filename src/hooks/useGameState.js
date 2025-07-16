@@ -84,12 +84,17 @@ export const useGameState = (gameId) => {
   const resetGame = useCallback(() => {
     if (!isCaptain) return;
     const initialScores = {};
-    for (let i = 1; i <= 10; i++) initialScores[i] = 0;
-    
+    const initialOuts = {};
+    for (let i = 1; i <= 10; i++) {
+      initialScores[i] = 0;
+      initialOuts[i] = false;
+    }
+
     const newState = {
       status: 'lobby',
       timeLeft: 1800,
-      scores: initialScores
+      scores: initialScores,
+      outs: initialOuts,
     };
     updateRemoteState(newState);
   }, [updateRemoteState, isCaptain]);
@@ -112,6 +117,14 @@ export const useGameState = (gameId) => {
 
     const newScores = { ...gameState.scores, [playerId]: newScore };
     const newState = { ...gameState, scores: newScores };
+    updateRemoteState(newState);
+  }, [gameState, updateRemoteState, isCaptain]);
+
+  const togglePlayerOut = useCallback((playerId) => {
+    if (!gameState || !isCaptain) return;
+    const current = gameState.outs?.[playerId] || false;
+    const newOuts = { ...gameState.outs, [playerId]: !current };
+    const newState = { ...gameState, outs: newOuts };
     updateRemoteState(newState);
   }, [gameState, updateRemoteState, isCaptain]);
 
@@ -208,9 +221,11 @@ export const useGameState = (gameId) => {
     pauseGame,
     resetGame,
     updatePlayerScore,
+    togglePlayerOut,
     finishGame,
     status: gameState?.status,
     timeLeft: gameState?.timeLeft,
     playerScores: gameState?.scores,
+    playerOuts: gameState?.outs,
   };
 };

@@ -6,10 +6,17 @@ const initScores = () => {
   return s;
 };
 
+const initOuts = () => {
+  const o = {};
+  for (let i = 1; i <= 10; i++) o[i] = false;
+  return o;
+};
+
 export const useLocalGame = () => {
   const [status, setStatus] = useState('lobby');
   const [timeLeft, setTimeLeft] = useState(1800);
   const [scores, setScores] = useState(initScores);
+  const [outs, setOuts] = useState(initOuts);
   const timerRef = useRef(null);
 
   const teamScores = {
@@ -29,6 +36,7 @@ export const useLocalGame = () => {
     setStatus('lobby');
     setTimeLeft(1800);
     setScores(initScores());
+    setOuts(initOuts());
   }, []);
 
   const updatePlayerScore = useCallback((playerId) => {
@@ -38,6 +46,10 @@ export const useLocalGame = () => {
       const next = current === 5 ? 0 : sequence[(sequence.indexOf(current) + 1) % sequence.length];
       return { ...prev, [playerId]: next };
     });
+  }, []);
+
+  const togglePlayerOut = useCallback((playerId) => {
+    setOuts(prev => ({ ...prev, [playerId]: !prev[playerId] }));
   }, []);
 
   useEffect(() => {
@@ -62,5 +74,7 @@ export const useLocalGame = () => {
     pauseGame,
     resetGame,
     updatePlayerScore,
+    togglePlayerOut,
+    playerOuts: outs,
   };
 };

@@ -13,15 +13,18 @@ const HomeScreen = () => {
     status,
     timeLeft,
     playerScores,
+    playerOuts,
     teamScores,
     startGame,
     pauseGame,
     resetGame,
-    updatePlayerScore
+    updatePlayerScore,
+    togglePlayerOut
   } = useLocalGame();
 
   const { playSound, initializeAudio } = useAudioManager();
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
+  const [playerTapTimes, setPlayerTapTimes] = useState({});
 
   const handleFirstInteraction = useCallback(async () => {
     if (!isAudioInitialized) {
@@ -58,6 +61,18 @@ const HomeScreen = () => {
     }
   }, [timeLeft, status, playSound]);
 
+  const handlePlayerScore = useCallback(async (id) => {
+    await handleFirstInteraction();
+    const now = Date.now();
+    const last = playerTapTimes[id] || 0;
+    if (now - last < 300) {
+      togglePlayerOut(id);
+    } else {
+      updatePlayerScore(id);
+    }
+    setPlayerTapTimes((prev) => ({ ...prev, [id]: now }));
+  }, [playerTapTimes, updatePlayerScore, togglePlayerOut, handleFirstInteraction]);
+
   const oddPlayers = Object.keys(playerScores)
     .map((id) => parseInt(id, 10))
     .filter((id) => id % 2 === 1)
@@ -85,7 +100,8 @@ const HomeScreen = () => {
               playerId={id}
               score={playerScores[id]}
               isRedTeam={true}
-              onClick={() => updatePlayerScore(id)}
+              isOut={playerOuts?.[id]}
+              onClick={() => handlePlayerScore(id)}
             />
           ))}
         </div>
@@ -101,7 +117,8 @@ const HomeScreen = () => {
               playerId={id}
               score={playerScores[id]}
               isRedTeam={false}
-              onClick={() => updatePlayerScore(id)}
+              isOut={playerOuts?.[id]}
+              onClick={() => handlePlayerScore(id)}
             />
           ))}
         </div>
