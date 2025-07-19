@@ -38,6 +38,7 @@ const GameScreen = memo(() => {
   const [lastTapTime, setLastTapTime] = useState(0);
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
   const [playerTapTimes, setPlayerTapTimes] = useState({});
+  const [scoreUpdateTimeouts, setScoreUpdateTimeouts] = useState({});
 
   const handleFirstInteraction = useCallback(async () => {
     if (!isAudioInitialized) {
@@ -75,23 +76,54 @@ const GameScreen = memo(() => {
       toast({ title: "Apenas capitães podem alterar o placar.", variant: "destructive"});
       return;
     }
+    
     const now = Date.now();
     const last = playerTapTimes[playerId] || 0;
+    
+    // Check if this is a double click (within 300ms)
     if (now - last < 300) {
+      // Double click detected - cancel any pending score update and toggle OUT
+      const timeoutId = scoreUpdateTimeouts[playerId];
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        setScoreUpdateTimeouts(prev => {
+          const newTimeouts = { ...prev };
+          delete newTimeouts[playerId];
+          return newTimeouts;
+        });
+      }
       togglePlayerOut(playerId);
     } else {
-      updatePlayerScore(playerId);
-      if (navigator.vibrate) navigator.vibrate(50);
+      // Single click - delay score update to allow for potential double click
+      const timeoutId = setTimeout(() => {
+        updatePlayerScore(playerId);
+        if (navigator.vibrate) navigator.vibrate(50);
+        setScoreUpdateTimeouts(prev => {
+          const newTimeouts = { ...prev };
+          delete newTimeouts[playerId];
+          return newTimeouts;
+        });
+      }, 300);
+      
+      setScoreUpdateTimeouts(prev => ({ ...prev, [playerId]: timeoutId }));
     }
+    
     setPlayerTapTimes((prev) => ({ ...prev, [playerId]: now }));
-  }, [updatePlayerScore, togglePlayerOut, handleFirstInteraction, isCaptain, toast, playerTapTimes]);
+  }, [updatePlayerScore, togglePlayerOut, handleFirstInteraction, isCaptain, toast, playerTapTimes, scoreUpdateTimeouts]);
 
   const handleResetConfirm = useCallback(() => {
     if (!isCaptain) return;
+    
+    // Clear any pending score update timeouts
+    Object.values(scoreUpdateTimeouts).forEach(timeoutId => {
+      if (timeoutId) clearTimeout(timeoutId);
+    });
+    setScoreUpdateTimeouts({});
+    
     resetGame();
     setShowConfirmDialog(false);
     toast({ title: "Jogo Reiniciado", description: "O estado do jogo foi zerado." });
-  }, [resetGame, toast, isCaptain]);
+  }, [resetGame, toast, isCaptain, scoreUpdateTimeouts]);
 
   useEffect(() => {
     if (status === 'running') {
@@ -108,6 +140,15 @@ const GameScreen = memo(() => {
       if (timeLeft <= 10 && timeLeft > 0) playSound('beep');
     }
   }, [timeLeft, status, playSound]);
+
+  // Cleanup timeouts when component unmounts
+  useEffect(() => {
+    return () => {
+      Object.values(scoreUpdateTimeouts).forEach(timeoutId => {
+        if (timeoutId) clearTimeout(timeoutId);
+      });
+    };
+  }, [scoreUpdateTimeouts]);
 
   if (loading) {
     return <div className="min-h-screen w-screen overflow-y-auto bg-gray-900 flex items-center justify-center text-white">Carregando Jogo...</div>;
