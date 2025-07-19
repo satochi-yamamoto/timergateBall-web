@@ -38,6 +38,7 @@ const GameScreen = memo(() => {
   const [lastTapTime, setLastTapTime] = useState(0);
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
   const [playerTapTimes, setPlayerTapTimes] = useState({});
+  const scoreUpdateTimeoutsRef = useRef({});
 
   const handleFirstInteraction = useCallback(async () => {
     if (!isAudioInitialized) {
@@ -75,19 +76,45 @@ const GameScreen = memo(() => {
       toast({ title: "Apenas capitães podem alterar o placar.", variant: "destructive"});
       return;
     }
+    
     const now = Date.now();
     const last = playerTapTimes[playerId] || 0;
-    if (now - last < 300) {
+    const timeDiff = now - last;
+    
+    // Update tap times immediately
+    setPlayerTapTimes((prev) => ({ ...prev, [playerId]: now }));
+    
+    // Check if this is a double click (within 300ms)
+    if (timeDiff < 300) {
+      // Double click detected - cancel any pending score update and toggle OUT only
+      const timeoutId = scoreUpdateTimeoutsRef.current[playerId];
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        delete scoreUpdateTimeoutsRef.current[playerId];
+      }
       togglePlayerOut(playerId);
-    } else {
+      return; // Exit early - don't proceed with score update logic
+    }
+    
+    // Single click - delay score update to allow for potential double click
+    const timeoutId = setTimeout(() => {
       updatePlayerScore(playerId);
       if (navigator.vibrate) navigator.vibrate(50);
-    }
-    setPlayerTapTimes((prev) => ({ ...prev, [playerId]: now }));
+      delete scoreUpdateTimeoutsRef.current[playerId];
+    }, 300);
+    
+    scoreUpdateTimeoutsRef.current[playerId] = timeoutId;
   }, [updatePlayerScore, togglePlayerOut, handleFirstInteraction, isCaptain, toast, playerTapTimes]);
 
   const handleResetConfirm = useCallback(() => {
     if (!isCaptain) return;
+    
+    // Clear any pending score update timeouts
+    Object.values(scoreUpdateTimeoutsRef.current).forEach(timeoutId => {
+      if (timeoutId) clearTimeout(timeoutId);
+    });
+    scoreUpdateTimeoutsRef.current = {};
+    
     resetGame();
     setShowConfirmDialog(false);
     toast({ title: "Jogo Reiniciado", description: "O estado do jogo foi zerado." });
@@ -108,6 +135,15 @@ const GameScreen = memo(() => {
       if (timeLeft <= 10 && timeLeft > 0) playSound('beep');
     }
   }, [timeLeft, status, playSound]);
+
+  // Cleanup timeouts when component unmounts
+  useEffect(() => {
+    return () => {
+      Object.values(scoreUpdateTimeoutsRef.current).forEach(timeoutId => {
+        if (timeoutId) clearTimeout(timeoutId);
+      });
+    };
+  }, []);
 
   if (loading) {
     return <div className="min-h-screen w-screen overflow-y-auto bg-gray-900 flex items-center justify-center text-white">Carregando Jogo...</div>;
