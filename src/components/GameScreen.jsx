@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, memo, useMemo, useRef } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { Play, Pause, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -84,8 +84,8 @@ const GameScreen = memo(() => {
     // Update tap times immediately
     setPlayerTapTimes((prev) => ({ ...prev, [playerId]: now }));
     
-    // Check if this is a double click (within 300ms)
-    if (timeDiff < 300) {
+    // Check if this is a double click (within 1000ms)
+    if (timeDiff < 1000) {
       // Double click detected - cancel any pending score update and toggle OUT only
       const timeoutId = scoreUpdateTimeoutsRef.current[playerId];
       if (timeoutId) {
@@ -101,7 +101,7 @@ const GameScreen = memo(() => {
       updatePlayerScore(playerId);
       if (navigator.vibrate) navigator.vibrate(50);
       delete scoreUpdateTimeoutsRef.current[playerId];
-    }, 300);
+    }, 1000);
     
     scoreUpdateTimeoutsRef.current[playerId] = timeoutId;
   }, [updatePlayerScore, togglePlayerOut, handleFirstInteraction, isCaptain, toast, playerTapTimes]);
