@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Timer from '@/components/Timer';
 import PlayerScore from '@/components/PlayerScore';
@@ -25,6 +25,7 @@ const HomeScreen = () => {
   const { playSound, initializeAudio } = useAudioManager();
   const [isAudioInitialized, setIsAudioInitialized] = useState(false);
   const [playerTapTimes, setPlayerTapTimes] = useState({});
+  const scoreUpdateTimeoutsRef = useRef({});
 
   const handleFirstInteraction = useCallback(async () => {
     if (!isAudioInitialized) {
@@ -65,13 +66,44 @@ const HomeScreen = () => {
     await handleFirstInteraction();
     const now = Date.now();
     const last = playerTapTimes[id] || 0;
-    if (now - last < 300) {
-      togglePlayerOut(id);
-    } else {
-      updatePlayerScore(id);
-    }
+    const diff = now - last;
+
     setPlayerTapTimes((prev) => ({ ...prev, [id]: now }));
+
+    if (diff < 1000) {
+      const timeoutId = scoreUpdateTimeoutsRef.current[id];
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        delete scoreUpdateTimeoutsRef.current[id];
+      }
+      togglePlayerOut(id);
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      updatePlayerScore(id);
+      if (navigator.vibrate) navigator.vibrate(50);
+      delete scoreUpdateTimeoutsRef.current[id];
+    }, 1000);
+
+    scoreUpdateTimeoutsRef.current[id] = timeoutId;
   }, [playerTapTimes, updatePlayerScore, togglePlayerOut, handleFirstInteraction]);
+
+  const handleReset = useCallback(() => {
+    Object.values(scoreUpdateTimeoutsRef.current).forEach((timeoutId) => {
+      if (timeoutId) clearTimeout(timeoutId);
+    });
+    scoreUpdateTimeoutsRef.current = {};
+    resetGame();
+  }, [resetGame]);
+
+  useEffect(() => {
+    return () => {
+      Object.values(scoreUpdateTimeoutsRef.current).forEach((timeoutId) => {
+        if (timeoutId) clearTimeout(timeoutId);
+      });
+    };
+  }, []);
 
   const oddPlayers = Object.keys(playerScores)
     .map((id) => parseInt(id, 10))
@@ -127,7 +159,7 @@ const HomeScreen = () => {
         <Button variant="outline" size="sm" onClick={handleTimer} className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700">
           {status === 'running' ? 'Pausar' : 'Iniciar'}
         </Button>
-        <Button variant="outline" size="sm" onClick={resetGame} className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700">
+        <Button variant="outline" size="sm" onClick={handleReset} className="bg-gray-800 border-gray-600 text-white hover:bg-gray-700">
           Reiniciar
         </Button>
       </div>
